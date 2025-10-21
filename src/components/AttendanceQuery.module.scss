@@ -1,0 +1,59 @@
+// SCSS变量
+$primary-color: #409eff;
+$border-color: #e4e7ed;
+$shadow-light: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+$border-radius: 4px;
+$spacing: 20px;
+
+.attendance-query {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.query-card,
+.result-card,
+.processed-card {
+  margin-bottom: $spacing;
+}
+
+.result-card {
+  background: #fff;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $spacing;
+  box-shadow: $shadow-light;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.query-form {
+  max-width: 600px;
+  
+  .el-form-item {
+    margin-bottom: $spacing;
+  }
+}
+
+/* 图片预览样式 */
+:global(.el-image-viewer__wrapper) {
+  z-index: 9999 !important;
+}
+
+:global(.el-image-viewer__mask) {
+  z-index: 9998 !important;
+}
+
+:global(.el-image-viewer__canvas) {
+  z-index: 9999 !important;
+}
+
+:global(.el-image-viewer__btn) {
+  z-index: 10000 !important;
+}
+
