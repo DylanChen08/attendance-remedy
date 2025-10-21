@@ -1,10 +1,17 @@
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { queryAttendanceRecords } from '@/api'
 import { getTodayTimeRange } from '@/utils'
 import type { AttendanceRecord } from '@/types'
-import styles from './AttendanceQuery.module.scss'
 import Repost from './repost'
+
+// SCSS module declaration
+declare module '*.module.scss' {
+  const classes: { [key: string]: string }
+  export default classes
+}
+
+import styles from './AttendanceQuery.module.scss'
 
 // JSX类型声明
 declare global {
@@ -18,6 +25,9 @@ declare global {
 export default defineComponent({
   name: 'AttendanceQuery',
   setup() {
+    // localStorage 键名
+    const STORAGE_KEY = 'attendance-query-form'
+    
     // 表单数据
     const form = reactive({
       token: '',
@@ -73,6 +83,43 @@ export default defineComponent({
     const handleRepostSuccess = () => {
       ElMessage.success('数据发送成功')
     }
+
+    // 保存表单数据到 localStorage
+    const saveFormToStorage = () => {
+      try {
+        const formData = {
+          token: form.token,
+          personName: form.personName,
+          timeRange: form.timeRange
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
+      } catch (error) {
+        console.warn('保存表单数据失败:', error)
+      }
+    }
+
+    // 从 localStorage 恢复表单数据
+    const loadFormFromStorage = () => {
+      try {
+        const savedData = localStorage.getItem(STORAGE_KEY)
+        if (savedData) {
+          const parsedData = JSON.parse(savedData)
+          if (parsedData.token) form.token = parsedData.token
+          if (parsedData.personName) form.personName = parsedData.personName
+          if (parsedData.timeRange) form.timeRange = parsedData.timeRange
+        }
+      } catch (error) {
+        console.warn('恢复表单数据失败:', error)
+      }
+    }
+
+    // 监听表单数据变化，自动保存
+    watch(form, saveFormToStorage, { deep: true })
+
+    // 组件挂载时恢复数据
+    onMounted(() => {
+      loadFormFromStorage()
+    })
 
     return () => (
       <div class={styles.attendanceQuery}>
@@ -146,6 +193,7 @@ export default defineComponent({
                   default: ({ row }: { row: AttendanceRecord }) => (
                     <el-image
                      z-index= {99999}
+                     preview-teleported={true}
                       style="width: 60px; height: 60px"
                       src={row.identifyImage}
                       zoom-rate={1.2}

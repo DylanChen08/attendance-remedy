@@ -22,6 +22,29 @@ $spacing: 20px;
   border-radius: $border-radius;
   padding: $spacing;
   box-shadow: $shadow-light;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: auto;
+  
+  // 自定义滚动条样式
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
 }
 
 .card-header {
@@ -38,22 +61,5 @@ $spacing: 20px;
   .el-form-item {
     margin-bottom: $spacing;
   }
-}
-
-/* 图片预览样式 */
-:global(.el-image-viewer__wrapper) {
-  z-index: 9999 !important;
-}
-
-:global(.el-image-viewer__mask) {
-  z-index: 9998 !important;
-}
-
-:global(.el-image-viewer__canvas) {
-  z-index: 9999 !important;
-}
-
-:global(.el-image-viewer__btn) {
-  z-index: 10000 !important;
 }
 
