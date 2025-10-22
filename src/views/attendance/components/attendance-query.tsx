@@ -1,17 +1,11 @@
 import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { queryAttendanceRecords } from '@/api'
+import { queryAttendanceRecordsApi } from '@/api'
 import { getTodayTimeRange } from '@/utils'
-import type { AttendanceRecord } from '@/types'
+import type { AttendanceRecord } from '../../../types'
+// 使用本地类型定义
 import Repost from './repost'
-
-
-import styles from './AttendanceQuery.module.scss'
-
-// JSX类型声明
-// 这段代码是全局声明，用于扩展JSX的IntrinsicElements，允许在JSX中使用任意名称的元素。
-// 这样做可以让TSX文件在类型检查时接受自定义标签或第三方库的组件标签，防止类型错误。
-// 一般用于使用UI库如Element Plus时，避免因缺乏类型定义而报错。
+import styles from '../styles/attendance-query.module.scss'
 
 export default defineComponent({
   name: 'AttendanceQuery',
@@ -42,7 +36,7 @@ export default defineComponent({
       loading.value = true
       try {
         const timeRange = form.timeRange || getTodayTimeRange()
-        const response = await queryAttendanceRecords(form.token, form.personName, timeRange)
+        const response = await queryAttendanceRecordsApi(form.token, form.personName, timeRange)
         
         if (response.success && response.data) {
           records.value = response.data
@@ -148,6 +142,71 @@ export default defineComponent({
                 format="YYYY-MM-DD HH:mm:ss"
                 value-format="YYYY-MM-DD HH:mm:ss"
                 default-time={[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]}
+                shortcuts={[
+                  {
+                    text: '今天',
+                    value: () => {
+                      const today = new Date()
+                      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
+                      const end = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
+                      return [start, end]
+                    }
+                  },
+                  {
+                    text: '昨天',
+                    value: () => {
+                      const yesterday = new Date()
+                      yesterday.setDate(yesterday.getDate() - 1)
+                      const start = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 0, 0, 0)
+                      const end = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 23, 59, 59)
+                      return [start, end]
+                    }
+                  },
+                  {
+                    text: '最近7天',
+                    value: () => {
+                      const end = new Date()
+                      const start = new Date()
+                      start.setDate(start.getDate() - 6)
+                      start.setHours(0, 0, 0, 0)
+                      end.setHours(23, 59, 59, 999)
+                      return [start, end]
+                    }
+                  },
+                  {
+                    text: '最近30天',
+                    value: () => {
+                      const end = new Date()
+                      const start = new Date()
+                      start.setDate(start.getDate() - 29)
+                      start.setHours(0, 0, 0, 0)
+                      end.setHours(23, 59, 59, 999)
+                      return [start, end]
+                    }
+                  },
+                  {
+                    text: '最近3个月',
+                    value: () => {
+                      const end = new Date()
+                      const start = new Date()
+                      start.setMonth(start.getMonth() - 3)
+                      start.setHours(0, 0, 0, 0)
+                      end.setHours(23, 59, 59, 999)
+                      return [start, end]
+                    }
+                  },
+                  {
+                    text: '最近6个月',
+                    value: () => {
+                      const end = new Date()
+                      const start = new Date()
+                      start.setMonth(start.getMonth() - 6)
+                      start.setHours(0, 0, 0, 0)
+                      end.setHours(23, 59, 59, 999)
+                      return [start, end]
+                    }
+                  }
+                ]}
               />
             </el-form-item>
             
@@ -190,9 +249,9 @@ export default defineComponent({
                       zoom-rate={1.2}
                       max-scale={7}
                       min-scale={0.2}
-                      preview-src-list={records.value.map(r => r.identifyImage)}
+                      preview-src-list={records.value.map((r: AttendanceRecord) => r.identifyImage)}
                       show-progress
-                      initial-index={records.value.findIndex(r => r.id === row.id)}
+                      initial-index={records.value.findIndex((r: AttendanceRecord) => r.id === row.id)}
                       fit="cover"
                     />
                   )

@@ -1,0 +1,99 @@
+.sidebar {
+  width: 200px;
+  height: 100%;
+  background: #304156;
+  transition: width 0.3s;
+  overflow: hidden;
+}
+
+.sidebar-collapsed {
+  width: 64px;
+}
+
+.sidebar-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-menu {
+  border: none !important;
+  background: #304156 !important;
+  height: 100%;
+}
+
+.sidebar-menu:not(.el-menu--collapse) {
+  width: 200px;
+}
+
+/* 默认状态 - 非激活 */
+.sidebar-menu .el-menu-item {
+  color: #bfcbd9 !important;
+  border-bottom: 1px solid #263445 !important;
+  background-color: transparent !important;
+}
+
+.sidebar-menu .el-menu-item .el-icon {
+  margin-right: 8px;
+  font-size: 16px;
+  color: #bfcbd9 !important;
+}
+
+.sidebar-menu .el-menu-item span {
+  color: #bfcbd9 !important;
+}
+
+/* 悬停状态 */
+.sidebar-menu .el-menu-item:hover {
+  background-color: #263445 !important;
+  color: #fff !important;
+}
+
+.sidebar-menu .el-menu-item:hover .el-icon {
+  color: #fff !important;
+}
+
+.sidebar-menu .el-menu-item:hover span {
+  color: #fff !important;
+}
+
+/* 激活状态 - 最重要，需要最高优先级 */
+.sidebar-menu .el-menu-item.is-active {
+  background-color: #409eff !important;
+  color: #fff !important;
+}
+
+.sidebar-menu .el-menu-item.is-active .el-icon {
+  color: #fff !important;
+}
+
+.sidebar-menu .el-menu-item.is-active span {
+  color: #fff !important;
+}
+
+/* 折叠状态下的样式 */
+.sidebar-collapsed .sidebar-menu .el-menu-item {
+  text-align: center;
+  padding: 0 20px;
+}
+
+.sidebar-collapsed .sidebar-menu .el-menu-item .el-icon {
+  margin-right: 0;
+}
+
+/* 滚动条样式 */
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: #304156;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #606266;
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #909399;
+}

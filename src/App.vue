@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <AttendanceQuery />
+    <Layout />
   </div>
 </template>
 
 <script setup lang="ts">
-import AttendanceQuery from './components/AttendanceQuery'
+import Layout from './components/Layout'
 </script>
 
 <style>
@@ -15,8 +15,17 @@ import AttendanceQuery from './components/AttendanceQuery'
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin: 0;
-  padding: 20px;
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  padding: 0;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 </style>

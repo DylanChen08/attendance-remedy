@@ -13,7 +13,8 @@
     "axios": "^1.6.0",
     "dayjs": "^1.11.0",
     "element-plus": "^2.4.0",
-    "vue": "^3.4.0"
+    "vue": "^3.4.0",
+    "vue-router": "^4.6.3"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { QueryParams, ApiResponse, AttendanceRecord, ProcessedRecord } from '@/types'
+import type { QueryParams, ApiResponse, AttendanceRecord, ProcessedRecord } from '../types'
 
 // 创建axios实例
 const api = axios.create({
@@ -31,7 +31,7 @@ api.interceptors.response.use(
 )
 
 // 查询考勤记录
-export const queryAttendanceRecords = async (
+export const queryAttendanceRecordsApi = async (
   token: string,
   personName: string,
   timeRange: [string, string]

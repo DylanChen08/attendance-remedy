@@ -2,27 +2,8 @@ import { defineComponent, ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { sendProcessedData } from '@/api'
 import { processAttendanceRecord } from '@/utils'
-import type { AttendanceRecord } from '@/types'
-
-// JSX 类型声明
-// 这段代码用于全局声明，扩展 JSX 的 IntrinsicElements 接口，允许在 JSX 中使用任何标签名，
-// 避免 TypeScript 在编译 TSX/JSX 时因找不到类型定义而报错。
-// 通常用于引入第三方 UI 库或自定义标签时，防止类型检查出错。
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elem: string]: any
-    }
-  }
-}
-
-interface RepostProps {
-  visible: boolean
-  record: AttendanceRecord | null
-  token: string
-  onClose: () => void
-  onSuccess: () => void
-}
+import type { AttendanceRecord } from '../../../types'
+// 使用本地类型定义
 
 export default defineComponent({
   name: 'Repost',
@@ -48,7 +29,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props: RepostProps) {
+  setup(props: any) {
     // 表单数据
     const form = reactive({
       identifyTime: '',

@@ -7,7 +7,11 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true
+      }
+    }),
     vueJsx(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
@@ -24,5 +28,23 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    hmr: {
+      overlay: false
+    },
+    cors: true
   },
+  optimizeDeps: {
+    include: ['vue', 'vue-router', 'element-plus']
+  },
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // 忽略某些警告
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return
+        }
+        warn(warning)
+      }
+    }
+  }
 })
