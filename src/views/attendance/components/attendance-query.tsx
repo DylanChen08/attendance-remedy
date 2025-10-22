@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { queryAttendanceRecordsApi } from '@/api'
 import { getTodayTimeRange } from '@/utils'
 import type { AttendanceRecord } from '../../../types'
-// 使用本地类型定义
+import { datePickerShortcuts, datePickerDefaultTime, datePickerFormat } from '../../../components/fast-calendar'
 import Repost from './repost'
 import styles from '../styles/attendance-query.module.scss'
 
@@ -25,9 +25,14 @@ export default defineComponent({
     const records = ref<AttendanceRecord[]>([])
     const repostVisible = ref(false)
     const selectedRecord = ref<AttendanceRecord | null>(null)
+    
+    // 分页状态
+    const currentPage = ref(1)
+    const pageSize = ref(10)
+    const total = ref(0)
 
     // 查询考勤记录
-    const handleQuery = async () => {
+    const handleQuery = async (page = 1) => {
       if (!form.token || !form.personName) {
         ElMessage.warning('请填写Token和姓名')
         return
@@ -40,6 +45,8 @@ export default defineComponent({
         
         if (response.success && response.data) {
           records.value = response.data
+          total.value = response.data.length
+          currentPage.value = page
           ElMessage.success(`查询成功，共找到 ${response.data.length} 条记录`)
         } else {
           ElMessage.error(response.msg || '查询失败')
@@ -50,6 +57,19 @@ export default defineComponent({
       } finally {
         loading.value = false
       }
+    }
+
+    // 分页变化处理
+    const handlePageChange = (page: number) => {
+      currentPage.value = page
+      handleQuery(page)
+    }
+
+    // 每页大小变化处理
+    const handleSizeChange = (size: number) => {
+      pageSize.value = size
+      currentPage.value = 1
+      handleQuery(1)
     }
 
     // 打开修改时间弹窗
@@ -139,74 +159,10 @@ export default defineComponent({
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                format="YYYY-MM-DD HH:mm:ss"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                default-time={[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]}
-                shortcuts={[
-                  {
-                    text: '今天',
-                    value: () => {
-                      const today = new Date()
-                      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
-                      const end = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
-                      return [start, end]
-                    }
-                  },
-                  {
-                    text: '昨天',
-                    value: () => {
-                      const yesterday = new Date()
-                      yesterday.setDate(yesterday.getDate() - 1)
-                      const start = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 0, 0, 0)
-                      const end = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 23, 59, 59)
-                      return [start, end]
-                    }
-                  },
-                  {
-                    text: '最近7天',
-                    value: () => {
-                      const end = new Date()
-                      const start = new Date()
-                      start.setDate(start.getDate() - 6)
-                      start.setHours(0, 0, 0, 0)
-                      end.setHours(23, 59, 59, 999)
-                      return [start, end]
-                    }
-                  },
-                  {
-                    text: '最近30天',
-                    value: () => {
-                      const end = new Date()
-                      const start = new Date()
-                      start.setDate(start.getDate() - 29)
-                      start.setHours(0, 0, 0, 0)
-                      end.setHours(23, 59, 59, 999)
-                      return [start, end]
-                    }
-                  },
-                  {
-                    text: '最近3个月',
-                    value: () => {
-                      const end = new Date()
-                      const start = new Date()
-                      start.setMonth(start.getMonth() - 3)
-                      start.setHours(0, 0, 0, 0)
-                      end.setHours(23, 59, 59, 999)
-                      return [start, end]
-                    }
-                  },
-                  {
-                    text: '最近6个月',
-                    value: () => {
-                      const end = new Date()
-                      const start = new Date()
-                      start.setMonth(start.getMonth() - 6)
-                      start.setHours(0, 0, 0, 0)
-                      end.setHours(23, 59, 59, 999)
-                      return [start, end]
-                    }
-                  }
-                ]}
+                format={datePickerFormat.format}
+                value-format={datePickerFormat.valueFormat}
+                default-time={datePickerDefaultTime}
+                shortcuts={datePickerShortcuts}
               />
             </el-form-item>
             
@@ -280,6 +236,20 @@ export default defineComponent({
                 }}
               </el-table-column>
             </el-table>
+            
+            {/* 分页器 */}
+            <div class={styles['pagination-container']}>
+              <el-pagination
+                v-model:current-page={currentPage.value}
+                v-model:page-size={pageSize.value}
+                page-sizes={[10, 20, 50, 100]}
+                layout="total, sizes, prev, pager, next, jumper"
+                total={total.value}
+                onSize-change={handleSizeChange}
+                onCurrent-change={handlePageChange}
+                background
+              />
+            </div>
           </el-card>
         )}
 

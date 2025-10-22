@@ -63,3 +63,20 @@ $spacing: 20px;
   }
 }
 
+.pagination-container {
+  margin-top: $spacing;
+  display: flex;
+  justify-content: flex-end;
+  padding: $spacing 0;
+  
+  .el-pagination {
+    .el-pagination__total {
+      color: #606266;
+    }
+    
+    .el-pagination__jump {
+      color: #606266;
+    }
+  }
+}
+
