@@ -3,15 +3,6 @@ import Navbar from './Navbar.vue'
 import Sidebar from './Sidebar'
 import styles from './Layout.module.scss'
 
-// JSX 类型声明
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elem: string]: any
-    }
-  }
-}
-
 export default defineComponent({
   name: 'Layout',
   setup() {
