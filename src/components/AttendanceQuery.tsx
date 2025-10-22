@@ -5,22 +5,13 @@ import { getTodayTimeRange } from '@/utils'
 import type { AttendanceRecord } from '@/types'
 import Repost from './repost'
 
-// SCSS module declaration
-declare module '*.module.scss' {
-  const classes: { [key: string]: string }
-  export default classes
-}
 
 import styles from './AttendanceQuery.module.scss'
 
 // JSX类型声明
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elem: string]: any
-    }
-  }
-}
+// 这段代码是全局声明，用于扩展JSX的IntrinsicElements，允许在JSX中使用任意名称的元素。
+// 这样做可以让TSX文件在类型检查时接受自定义标签或第三方库的组件标签，防止类型错误。
+// 一般用于使用UI库如Element Plus时，避免因缺乏类型定义而报错。
 
 export default defineComponent({
   name: 'AttendanceQuery',

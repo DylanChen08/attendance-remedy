@@ -19,5 +19,12 @@ declare global {
     interface IntrinsicElements {
       [elem: string]: any
     }
+    interface Element extends HTMLElement {}
+    interface ElementClass {
+      render(): any
+    }
+    interface ElementAttributesProperty {
+      props: {}
+    }
   }
 }
